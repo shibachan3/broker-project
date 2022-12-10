@@ -73,4 +73,3 @@ def to_write():
     idx = select_write_spot(wc)
     write_to_default_excel(wc, value_list, start_row=idx, start_col=11)
     wb.save(output_path)
-    print('a')
