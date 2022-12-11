@@ -32,21 +32,48 @@ class Application(tkinter.Frame):
 
         # ラジオボタンの設定
         self.selected_radio = tkinter.StringVar()
-        radio_1 = tkinter.Radiobutton(self, text="新規作成",value="nwe", variable=self.selected_radio)
-        radio_2 = tkinter.Radiobutton(self, text="更新",value="update", variable=self.selected_radio)
-        radio_1.pack()
-        radio_2.pack()
+        self.radio_1 = tkinter.Radiobutton(
+            self, text="新規作成",value="new", command=self.radio_click, variable=self.selected_radio
+            )
+        self.radio_2 = tkinter.Radiobutton(
+            self, text="更新",value="update", command=self.radio_click, variable=self.selected_radio
+            )
+        self.radio_1.pack()
+        self.radio_2.pack()
+
+    def radio_click(self):
+        # ラジオボタンの値を取得
+        self.radio_value = self.selected_radio.get()
 
     def read_button_func(self):
         '読み込みボタンが押された時の処理'
-        input_file_path = tkinter.filedialog.askopenfilename()
-        output_file_path = tkinter.filedialog.asksaveasfilename(
-            title = "Save",
-            filetypes = [("Excel files", ".xlsx .xls")]
-            )
+        if self.radio_value == "new":
+            input_file_path = tkinter.filedialog.askopenfilename(
+                title="csvファイル選択", filetypes=[("Csv File",".csv")]
+                )
+            output_file_path = tkinter.filedialog.asksaveasfilename(
+                title = "Save",
+                filetypes = [("Excel files", ".xlsx .xls")]
+                )
+            # 自動書き込み
+            to_write(sedori_path=input_file_path, output_path=output_file_path)
 
-        # 自動書き込み
-        to_write(input_file_path, output_file_path)
+        if self.radio_value == "update":
+            input_csv_path = tkinter.filedialog.askopenfilename(
+                title="csvファイル選択", filetypes=[("Csv File",".csv")]
+                )
+            input_excel_path = tkinter.filedialog.askopenfilename(
+                title="excelファイル選択", filetypes=[("Excel File",".xlsx")]
+                )
+
+            output_file_path = tkinter.filedialog.asksaveasfilename(
+                title = "Save",
+                filetypes = [("Excel files", ".xlsx .xls")]
+                )
+            # 自動書き込み
+            to_write(input_csv_path, input_excel_path, output_file_path)
+
+
 
 # GUIアプリ生成
 root = tkinter.Tk()
